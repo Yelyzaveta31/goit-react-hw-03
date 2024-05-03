@@ -11,15 +11,34 @@ const contactData = [
 ];
 
 function App() {
-  const [contacts, setContacts] = useState(contactData);
+  const [searchValue, setSearchValue] = useState("");
+  const [contacts, setContacts] = useState(
+    () =>
+      JSON.parse(window.localStorage.getItem("saved-contacts")) || contactData
+  );
+  const handleDelete = (id) => {
+    setContacts((prev) => {
+      const updatedContacts = prev.filter((contact) => contact.id !== id);
+      window.localStorage.setItem(
+        "saved-contacts",
+        JSON.stringify(updatedContacts)
+      );
+      return updatedContacts;
+    });
+  };
+
+  const searchContacts = contacts.filter((contact) =>
+    contact.name.toLowerCase().includes(searchValue.toLowerCase())
+  );
+  const filteredContacts = searchContacts;
   return (
     <div>
       <h style={{ marginLeft: "40px", fontSize: "40px", fontWeight: "bold" }}>
         Phonebook
       </h>
       <ContactForm />
-      <SearchBox />
-      <ContactList contacts={contacts} />
+      <SearchBox searchValue={searchValue} setSearchValue={setSearchValue} />
+      <ContactList contacts={filteredContacts} handleDelete={handleDelete} />
     </div>
   );
 }

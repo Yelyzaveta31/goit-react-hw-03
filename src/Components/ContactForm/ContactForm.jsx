@@ -2,14 +2,13 @@ import { useId } from "react";
 import { Field, Form, Formik } from "formik";
 import s from "./ContactForm.module.css";
 
-const initialValues = {
-  username: "",
-  email: "",
-};
-
 const ContactForm = () => {
+  const initialValues = {
+    username: "",
+    email: "",
+  };
   const nameFieldId = useId();
-  const emailFieldId = useId();
+  const numberFieldId = useId();
   const handleSubmit = (values, actions) => {
     console.log(values);
     actions.resetForm();
@@ -26,10 +25,14 @@ const ContactForm = () => {
           Name
         </label>
         <Field type="text" name="username" id={nameFieldId} />
-        <label className={s.form_list} htmlFor={emailFieldId} id={emailFieldId}>
-          Email
+        <label
+          className={s.form_list}
+          htmlFor={numberFieldId}
+          id={numberFieldId}
+        >
+          Number
         </label>
-        <Field type="email" name="email" />
+        <Field type="number" name="email" />
         <button className={s.button} type="submit">
           Add contact
         </button>
