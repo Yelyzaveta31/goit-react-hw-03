@@ -1,38 +1,45 @@
-import { useId } from "react";
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, ErrorMessage } from "formik";
 import s from "./ContactForm.module.css";
+import * as Yup from "yup";
 
-const ContactForm = () => {
+const FeedbackSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(3, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Please, add your name"),
+  number: Yup.string()
+    .min(7, "Too Short!")
+    .max(15, "Too Long!")
+    .required("Please, add your phone"),
+});
+
+const ContactForm = ({ onAdd }) => {
   const initialValues = {
-    username: "",
-    email: "",
+    name: "",
+    number: "",
   };
-  const nameFieldId = useId();
-  const numberFieldId = useId();
+
   const handleSubmit = (values, actions) => {
-    console.log(values);
+    onAdd(values);
     actions.resetForm();
   };
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={() => {
-        handleSubmit;
-      }}
+      onSubmit={handleSubmit}
+      validationSchema={FeedbackSchema}
     >
       <Form className={s.form}>
-        <label className={s.form_list} htmlFor={nameFieldId}>
+        <label className={s.form_list} htmlFor="name">
           Name
         </label>
-        <Field type="text" name="username" id={nameFieldId} />
-        <label
-          className={s.form_list}
-          htmlFor={numberFieldId}
-          id={numberFieldId}
-        >
+        <Field type="text" name="name" id="name" />
+        <ErrorMessage className={s.error} name="name" component="span" />
+        <label className={s.form_list} htmlFor="number">
           Number
         </label>
-        <Field type="number" name="email" />
+        <Field type="number" name="number" id="number" />
+        <ErrorMessage className={s.error} name="number" component="span" />
         <button className={s.button} type="submit">
           Add contact
         </button>

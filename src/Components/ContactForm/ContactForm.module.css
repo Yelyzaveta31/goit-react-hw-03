@@ -21,3 +21,12 @@
   margin: 0 auto;
   margin-top: 15px;
 }
+
+.s.form_list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.error {
+  color: red;
+}
